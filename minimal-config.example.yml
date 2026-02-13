@@ -1,0 +1,6 @@
+buckets:
+  photos:
+    endpoint_url: "https://minio.example.com"
+    bucket_name: "my-photos"
+    access_key: "<access_key>"
+    secret_key: "<secret_key>"
