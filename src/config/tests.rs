@@ -51,7 +51,7 @@ buckets:
     secret_key: "secret"
 "#;
     let config: AppConfig = serde_yaml::from_str(yaml).unwrap();
-    assert_eq!(config.listen, "0.0.0.0:8080");
+    assert_eq!(config.listen, "[::]:8080");
     assert_eq!(config.presign_expiry_secs, 300);
 
     let bucket = &config.buckets["test"];
