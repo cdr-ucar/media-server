@@ -12,12 +12,35 @@ fn default_force_path_style() -> bool {
     constants::DEFAULT_S3_FORCE_PATH_STYLE
 }
 
+#[derive(PartialEq, Clone, Debug, Deserialize)]
+#[serde(untagged)]
+pub enum CredentialConfig {
+    Plain { plain: String },
+    Path { path: String },
+    Env { env: String },
+}
+
+impl Into<String> for CredentialConfig {
+    fn into(self) -> String {
+        match self {
+            CredentialConfig::Plain { plain } => plain,
+            CredentialConfig::Path { path } => std::fs::read(path.clone())
+                .unwrap_or_else(|_| panic!("Unable to read credential file \"{path}\""))
+                .try_into()
+                .unwrap_or_else(|_| panic!("Unable to read content of credential file \"{path}\"")),
+            CredentialConfig::Env { env } => std::env::var(env.clone()).unwrap_or_else(|_| {
+                panic!("Missing or unprocessable environment variable \"{env}\"")
+            }),
+        }
+    }
+}
+
 #[derive(Debug, Deserialize)]
 pub struct BucketConfig {
     pub endpoint_url: String,
     pub bucket_name: String,
-    pub access_key: String,
-    pub secret_key: String,
+    pub access_key: CredentialConfig,
+    pub secret_key: CredentialConfig,
     #[serde(default = "default_region")]
     pub region: String,
     #[serde(default = "default_force_path_style")]

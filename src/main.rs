@@ -19,8 +19,7 @@ async fn main() {
     let listener = tokio::net::TcpListener::bind(&listen)
         .await
         .expect("failed to bind");
+    tracing::info!("listening on {listen}");
 
     axum::serve(listener, router).await.expect("server error");
-
-    tracing::info!("listening on {listen}");
 }

@@ -48,7 +48,13 @@ impl S3Clients {
 }
 
 fn build_s3_client(bc: &BucketConfig) -> aws_sdk_s3::Client {
-    let credentials = Credentials::new(&bc.access_key, &bc.secret_key, None, None, "celia-media");
+    let credentials = Credentials::new(
+        bc.access_key.clone(),
+        bc.secret_key.clone(),
+        None,
+        None,
+        "celia-media",
+    );
 
     let s3_config = aws_sdk_s3::Config::builder()
         .endpoint_url(&bc.endpoint_url)
