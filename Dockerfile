@@ -38,7 +38,7 @@ FROM debian:bookworm-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates && rm -rf /var/lib/apt/lists/*
 
-COPY --from=builder /app/target/release/celia-media /usr/local/bin/celia-media
+COPY --from=builder /app/celia-media /usr/local/bin/celia-media
 
 ENV CELIA_CONFIG_PATH=/etc/celia-media/config.yml
 
