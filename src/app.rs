@@ -1,5 +1,6 @@
 use axum::Router;
 use axum::routing::get;
+use tower_http::cors::CorsLayer;
 
 use crate::config::AppConfig;
 use crate::s3::new_file_server;
@@ -10,4 +11,5 @@ pub fn build_router(config: &AppConfig) -> Router {
     Router::new()
         .route("/{config_name}/{*file_path}", get(crate::routes::get_file))
         .with_state(server)
+        .layer(CorsLayer::new().allow_origin(tower_http::cors::Any))
 }

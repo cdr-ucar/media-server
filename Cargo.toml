@@ -17,6 +17,7 @@ tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 eyre = "0.6.12"
 color-eyre = "0.6.5"
 ctrlc = "3.5.2"
+tower-http = { version = "0.6.8", features = ["cors"] }
 
 [dev-dependencies]
 http-body-util = "0.1"
