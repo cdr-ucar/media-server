@@ -1,6 +1,6 @@
 # syntax=docker/dockerfile:1.6
 
-FROM rust:slim AS builder
+FROM rust:1-alpine3.23 AS builder
 
 WORKDIR /app
 
@@ -34,9 +34,9 @@ RUN --mount=type=cache,target=/usr/local/cargo/registry \
   cargo build --release --locked \
   && cp target/release/celia-media .
 
-FROM debian:bookworm-slim
+FROM alpine:3.23
 
-RUN apt-get update && apt-get install -y --no-install-recommends ca-certificates && rm -rf /var/lib/apt/lists/*
+RUN apk add --no-cache ca-certificates
 
 COPY --from=builder /app/celia-media /usr/local/bin/celia-media
 
