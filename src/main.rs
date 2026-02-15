@@ -14,10 +14,10 @@ async fn main() -> eyre::Result<()> {
         .with_env_filter(EnvFilter::from_default_env())
         .init();
 
-    ctrlc::set_handler(|| {
-        tracing::info!("Received termination signal, exiting...");
-        std::process::exit(0);
-    })?;
+    // ctrlc::set_handler(|| {
+    //     tracing::info!("Received termination signal, exiting...");
+    //     std::process::exit(0);
+    // })?;
 
     let config = config::AppConfig::load()?;
     let listen = config.listen.clone();
