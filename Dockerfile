@@ -1,27 +1,29 @@
 # syntax=docker/dockerfile:1.6
 
-FROM rust:1-alpine3.23 AS builder
+FROM rust:1-alpine3.23 AS chef
+
+RUN cargo install cargo-chef --locked
+
+FROM chef AS planner
 
 WORKDIR /app
 
-ENV CARGO_TERM_COLOR=always
+COPY . .
 
-COPY Cargo.toml Cargo.lock ./
+RUN cargo chef prepare --recipe-path recipe.json
 
-RUN mkdir -p src && echo 'fn main() {}' > src/main.rs
+FROM chef AS builder
+
+WORKDIR /app
+
+COPY --from=planner /app/recipe.json recipe.json
 
 RUN --mount=type=cache,target=/usr/local/cargo/registry \
   --mount=type=cache,target=/usr/local/cargo/git \
   --mount=type=cache,target=/app/target \
-  cargo build --locked
+  cargo chef cook --release --recipe-path recipe.json
 
-RUN --mount=type=cache,target=/usr/local/cargo/registry \
-  --mount=type=cache,target=/usr/local/cargo/git \
-  --mount=type=cache,target=/app/target \
-  cargo build --release --locked
-
-RUN rm -rf src
-COPY src ./src
+COPY . .
 
 RUN --mount=type=cache,target=/usr/local/cargo/registry \
   --mount=type=cache,target=/usr/local/cargo/git \
@@ -31,8 +33,8 @@ RUN --mount=type=cache,target=/usr/local/cargo/registry \
 RUN --mount=type=cache,target=/usr/local/cargo/registry \
   --mount=type=cache,target=/usr/local/cargo/git \
   --mount=type=cache,target=/app/target \
-  cargo build --release --locked \
-  && cp target/release/media-server .
+  cargo build --release --locked --bin media-server \
+  && cp -f target/release/media-server /app/media-server
 
 FROM alpine:3.23
 
@@ -44,4 +46,4 @@ ENV MEDIA_SERVER_CONFIG_PATH=/etc/media-server/config.yml
 
 EXPOSE 8080
 
-CMD ["media-server"]
+CMD ["/usr/local/bin/media-server"]
