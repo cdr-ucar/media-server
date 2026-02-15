@@ -32,16 +32,16 @@ RUN --mount=type=cache,target=/usr/local/cargo/registry \
   --mount=type=cache,target=/usr/local/cargo/git \
   --mount=type=cache,target=/app/target \
   cargo build --release --locked \
-  && cp target/release/celia-media .
+  && cp target/release/media-server .
 
 FROM alpine:3.23
 
 RUN apk add --no-cache ca-certificates
 
-COPY --from=builder /app/celia-media /usr/local/bin/celia-media
+COPY --from=builder /app/media-server /usr/local/bin/media-server
 
-ENV CELIA_CONFIG_PATH=/etc/celia-media/config.yml
+ENV MEDIA_SERVER_CONFIG_PATH=/etc/media-server/config.yml
 
 EXPOSE 8080
 
-CMD ["celia-media"]
+CMD ["media-server"]

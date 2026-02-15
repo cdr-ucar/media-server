@@ -1,5 +1,5 @@
 name: build-test-deploy
-run-name: Build, test, and deploy Celia Media
+run-name: Build, test, and deploy Media Server
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository_owner }}/celia-media
+  IMAGE_NAME: ${{ github.repository_owner }}/media-server
 
 permissions:
   contents: read

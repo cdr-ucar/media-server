@@ -53,7 +53,7 @@ fn build_s3_client(bc: &BucketConfig) -> aws_sdk_s3::Client {
         bc.secret_key.clone(),
         None,
         None,
-        "celia-media",
+        "media-server",
     );
 
     let s3_config = aws_sdk_s3::Config::builder()

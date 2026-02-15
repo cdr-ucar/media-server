@@ -24,7 +24,7 @@ async fn main() -> eyre::Result<()> {
     let router = app::build_router(&config);
 
     let listener = tokio::net::TcpListener::bind(&listen).await?;
-    tracing::info!("listening on {listen}");
+    tracing::info!("Listening on {listen}");
 
     axum::serve(listener, router).await?;
 

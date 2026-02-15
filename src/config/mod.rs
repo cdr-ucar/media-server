@@ -73,7 +73,7 @@ pub struct AppConfig {
 
 impl AppConfig {
     pub fn load() -> eyre::Result<Self> {
-        let path = std::env::var(constants::CELIA_CONFIG_PATH)
+        let path = std::env::var(constants::MEDIA_SERVER_CONFIG_PATH)
             .map(PathBuf::from)
             .unwrap_or_else(|_| PathBuf::from(constants::DEFAULT_CONFIG_PATH));
 
