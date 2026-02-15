@@ -72,13 +72,12 @@ pub struct AppConfig {
 }
 
 impl AppConfig {
-    pub fn load() -> Result<Self, Box<dyn std::error::Error>> {
+    pub fn load() -> eyre::Result<Self> {
         let path = std::env::var(constants::CELIA_CONFIG_PATH)
             .map(PathBuf::from)
             .unwrap_or_else(|_| PathBuf::from(constants::DEFAULT_CONFIG_PATH));
 
-        let contents = std::fs::read_to_string(&path)
-            .map_err(|e| format!("failed to read config file {}: {e}", path.display()))?;
+        let contents = std::fs::read_to_string(&path)?;
 
         let config: AppConfig = serde_yaml::from_str(&contents)?;
         Ok(config)
