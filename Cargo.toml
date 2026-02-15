@@ -16,6 +16,7 @@ tokio-util = { version = "0.7", features = ["io"] }
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 eyre = "0.6.12"
 color-eyre = "0.6.5"
+ctrlc = "3.5.2"
 
 [dev-dependencies]
 http-body-util = "0.1"
